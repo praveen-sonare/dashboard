@@ -17,29 +17,83 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
+import QtWebSockets 1.0
 
 ApplicationWindow {
     id: root
+
+    WebSocket {
+        property string api_str: "api/canivi"
+        property string verb_str: "subscribe"
+        property var msgid_enu: { "call":2, "retok":3, "reterr":4, "event":5 }
+        property string request_str: ""
+        property string status_str: ""
+
+        id: websocket
+        url: bindingAddress
+
+        onTextMessageReceived: {
+            var message_json = JSON.parse (message);
+            /*
+            console.log ("Raw response: " + message)
+            console.log ("JSON response: " + message_json)
+             */
+
+            if (message_json[0] == msgid_enu.event) {
+                if (message_json[1] == "canivi/VehicleSpeed")
+                    speed.text = message_json[2].data.value
+                else
+                if (message_json[1] == "canivi/EngineSpeed")
+                    tachometer.value = message_json[2].data.value / 7000
+                return
+            } else
+            if (message_json[0] != msgid_enu.retok) {
+                console.log ("Return value is not ok !")
+                return
+            }
+             /* refresh happen */
+        }
+        onStatusChanged: {
+            if (websocket.status == WebSocket.Error) {
+                status_str = "Error: " + websocket.errorString
+            }
+            else
+            if (websocket.status == WebSocket.Open) {
+                status_str = "Socket opened; sending message..."
+                if (verb_str == "subscribe") {
+                    request_str ='[' + msgid_enu.call + ',"99999","' + api_str +'/'+ verb_str +'",{ \"event\" : \"VehicleSpeed\" } ]';
+                    websocket.sendTextMessage (request_str)
+                    request_str ='[' + msgid_enu.call + ',"99999","' + api_str +'/'+ verb_str +'",{ \"event\" : \"EngineSpeed\" } ]';
+                    websocket.sendTextMessage (request_str)
+                }
+            } else
+            if (websocket.status == WebSocket.Closed) {
+                status_str = "Socket closed"
+            }
+            console.log (status_str)
+        }
+        active: true
+    }
 
     Label {
         id: speed
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 20
-        text: '1'
+        text: '0'
         font.pixelSize: 256
     }
     Label {
         id: unit
         anchors.left: speed.right
         anchors.baseline: speed.baseline
-        text: 'MPH'
+        text: 'Km/h'
         font.pixelSize: 64
     }
     Label {
         anchors.left: unit.left
         anchors.top: unit.bottom
-        text: '100,000.5 MI'
+        text: '100,000.5 km'
         font.pixelSize: 32
         opacity: 0.5
     }
@@ -99,13 +153,14 @@ ApplicationWindow {
             source: './images/HMI_Dashboard_Speed_Icon.svg'
         }
         ProgressBar {
+            id: tachometer
             Layout.fillWidth: true
-            value: 0.25
+            value: 0
             Label {
                 anchors.left: parent.left
                 anchors.top: parent.bottom
                 anchors.topMargin: 10
-                text: 'SPEED (MPH)'
+                text: '(RPM)'
                 font.pixelSize: 26
             }
         }

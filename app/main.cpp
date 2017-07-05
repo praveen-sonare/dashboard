@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
+#include <QUrlQuery> 
+#include <QQmlContext>
 #include <QtCore/QDebug>
+#include <QCommandLineParser>
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQuickControls2/QQuickStyle>
@@ -35,10 +38,36 @@ int main(int argc, char *argv[])
 #endif
 
     QGuiApplication app(argc, argv);
+    app.setApplicationName(QStringLiteral("Dashboard"));
+    app.setApplicationVersion(QStringLiteral("3.99.3"));
+    app.setOrganizationDomain(QStringLiteral("automotivelinux.org"));
+    app.setOrganizationName(QStringLiteral("AutomotiveGradeLinux"));
 
     QQuickStyle::setStyle("AGL");
 
+    QCommandLineParser parser;
+    parser.addPositionalArgument("port", app.translate("main", "port for binding"));
+    parser.addPositionalArgument("secret", app.translate("main", "secret for binding"));
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.process(app);
+    QStringList positionalArguments = parser.positionalArguments();
+
     QQmlApplicationEngine engine;
+    if (positionalArguments.length() == 2) {
+        int port = positionalArguments.takeFirst().toInt();
+        QString secret = positionalArguments.takeFirst();
+        QUrl bindingAddress;
+        bindingAddress.setScheme(QStringLiteral("ws"));
+        bindingAddress.setHost(QStringLiteral("localhost"));
+        bindingAddress.setPort(port);
+        bindingAddress.setPath(QStringLiteral("/api"));
+        QUrlQuery query;
+        query.addQueryItem(QStringLiteral("token"), secret);
+        bindingAddress.setQuery(query);
+        QQmlContext *context = engine.rootContext();
+        context->setContextProperty(QStringLiteral("bindingAddress"), bindingAddress);
+    }
     engine.load(QUrl(QStringLiteral("qrc:/Dashboard.qml")));
 
     return app.exec();
