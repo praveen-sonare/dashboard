@@ -18,9 +18,14 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import QtWebSockets 1.0
+import Translator 1.0
 
 ApplicationWindow {
     id: root
+
+    Translator {
+        id: translator
+    }
 
     WebSocket {
         property string api_str: "api/canivi"
@@ -109,8 +114,8 @@ ApplicationWindow {
         anchors.rightMargin: -20
         anchors.top: car.top
         anchors.topMargin: 150
-        title: 'LEFT FRONT TIRE'
-        pressure: '23.1 PSI'
+        title: translator.translate(qsTr('LEFT FRONT TIRE'), translator.language)
+        pressure: translator.translate(qsTr('%1 PSI').arg(23.1), translator.language)
     }
 
     TirePressure {
@@ -118,8 +123,8 @@ ApplicationWindow {
         anchors.rightMargin: -20
         anchors.bottom: car.bottom
         anchors.bottomMargin: 120
-        title: 'LEFT REAR TIRE'
-        pressure: '31.35 PSI'
+        title: translator.translate(qsTr('LEFT REAR TIRE'), translator.language)
+        pressure: translator.translate(qsTr('%1 PSI').arg(31.35), translator.language)
     }
 
     TirePressure {
@@ -128,8 +133,8 @@ ApplicationWindow {
         anchors.leftMargin: -20
         anchors.top: car.top
         anchors.topMargin: 150
-        title: 'RIGHT FRONT TIRE'
-        pressure: '24.2 PSI'
+        title: translator.translate(qsTr('RIGHT FRONT TIRE'), translator.language)
+        pressure: translator.translate(qsTr('%1 PSI').arg(24.2), translator.language)
     }
 
     TirePressure {
@@ -138,8 +143,8 @@ ApplicationWindow {
         anchors.leftMargin: -20
         anchors.bottom : car.bottom
         anchors.bottomMargin: 120
-        title: 'RIGHT REAR TIRE'
-        pressure: '33.0 PSI'
+        title: translator.translate(qsTr('RIGHT REAR TIRE'), translator.language)
+        pressure: translator.translate(qsTr('%1 PSI').arg(33.0), translator.language)
     }
 
     RowLayout {
@@ -160,7 +165,7 @@ ApplicationWindow {
                 anchors.left: parent.left
                 anchors.top: parent.bottom
                 anchors.topMargin: 10
-                text: '(RPM)'
+                text: translator.translate(qsTr('(RPM)'), translator.language)
                 font.pixelSize: 26
             }
         }
@@ -190,7 +195,7 @@ ApplicationWindow {
                         Layout.fillHeight: true
                         verticalAlignment: Label.AlignVCenter
                         horizontalAlignment: Label.AlignRight
-                        text: 'LEVEL:'
+                        text: translator.translate(qsTr('LEVEL:'), translator.language)
                         font.pixelSize: 24
                     }
                     Label {
@@ -199,7 +204,7 @@ ApplicationWindow {
                         Layout.fillHeight: true
                         verticalAlignment: Label.AlignVCenter
                         horizontalAlignment: Label.AlignLeft
-                        text: '9 GALLONS'
+                        text: translator.translate(qsTr('%1 GALLONS').arg(9), translator.language)
                         font.pixelSize: 24
                         color: '#66FF99'
                     }
@@ -209,7 +214,7 @@ ApplicationWindow {
                         Layout.fillHeight: true
                         verticalAlignment: Label.AlignVCenter
                         horizontalAlignment: Label.AlignRight
-                        text: 'RANGE:'
+                        text: translator.translate(qsTr('RANGE:'), translator.language)
                         font.pixelSize: 24
                     }
                     Label {
@@ -218,7 +223,7 @@ ApplicationWindow {
                         Layout.fillHeight: true
                         verticalAlignment: Label.AlignVCenter
                         horizontalAlignment: Label.AlignLeft
-                        text: '229 MI'
+                        text: translator.translate(qsTr('%1 MI').arg(9), translator.language)
                         font.pixelSize: 24
                         color: '#66FF99'
                     }
@@ -228,7 +233,7 @@ ApplicationWindow {
                         Layout.fillHeight: true
                         verticalAlignment: Label.AlignVCenter
                         horizontalAlignment: Label.AlignRight
-                        text: 'AVG:'
+                        text: translator.translate(qsTr('AVG:'), translator.language)
                         font.pixelSize: 24
                     }
                     Label {
@@ -237,7 +242,7 @@ ApplicationWindow {
                         Layout.fillHeight: true
                         verticalAlignment: Label.AlignVCenter
                         horizontalAlignment: Label.AlignLeft
-                        text: '25.5 MPG'
+                        text: translator.translate(qsTr('%1 MPG').arg(25.5), translator.language)
                         font.pixelSize: 24
                         color: '#66FF99'
                     }
@@ -248,8 +253,24 @@ ApplicationWindow {
                 anchors.left: parent.left
                 anchors.top: parent.bottom
                 anchors.topMargin: 10
-                text: 'FUEL'
+                text: translator.translate(qsTr('FUEL'), translator.language)
                 font.pixelSize: 26
+            }
+        }
+    }
+
+    RowLayout {
+//        visible: false
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        Repeater {
+            model: ['C', 'fr_FR', 'ja_JP', 'zh_CN']
+
+            Button {
+                text: model.modelData
+                onClicked: translator.language = model.modelData
+                Layout.fillWidth: true
             }
         }
     }
