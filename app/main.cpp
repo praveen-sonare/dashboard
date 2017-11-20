@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-#include <QUrlQuery> 
-#include <QQmlContext>
 #include <QtCore/QDebug>
-#include <QCommandLineParser>
+#include <QtCore/QCommandLineParser>
+#include <QtCore/QUrlQuery>
 #include <QtGui/QGuiApplication>
+#include <QtQml/QQmlContext>
 #include <QtQml/QQmlApplicationEngine>
+#include <QtQuick/QQuickWindow>
 #include <QtQuickControls2/QQuickStyle>
-#include <QQuickWindow>
+
+#include "translator.h"
+
 #include <libhomescreen.hpp>
 #include <qlibwindowmanager.h>
 
@@ -44,6 +47,8 @@ int main(int argc, char *argv[])
     parser.addVersionOption();
     parser.process(app);
     QStringList positionalArguments = parser.positionalArguments();
+
+    qmlRegisterType<Translator>("Translator", 1, 0, "Translator");
 
     QQmlApplicationEngine engine;
     if (positionalArguments.length() == 2) {
