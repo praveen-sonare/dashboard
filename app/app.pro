@@ -7,9 +7,6 @@ HEADERS += \
 SOURCES = main.cpp \
     translator.cpp
 
-CONFIG += link_pkgconfig
-PKGCONFIG += libhomescreen qlibwindowmanager
-
 RESOURCES += \
     dashboard.qrc \
     images/images.qrc
