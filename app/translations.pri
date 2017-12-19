@@ -3,13 +3,13 @@ defineReplace(prependAll) {
     return($$result)
 }
 
-qtPrepareTool(QMAKE_LRELEASE, lrelease)
+LRELEASE = lrelease
 TRANSLATIONS = $$prependAll(LANGUAGES, $$PWD/translations/$${TARGET}_,.ts)
 
 qm.depends = $${TRANSLATIONS}
 qm.input = TRANSLATIONS
 qm.output = $$OUT_PWD/../package/root/translations/${QMAKE_FILE_BASE}.qm
-qm.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_OUT}
+qm.commands = $$LRELEASE ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_OUT}
 qm.name = LRELEASE ${QMAKE_FILE_IN}
 qm.CONFIG += no_link
 QMAKE_EXTRA_COMPILERS += qm
