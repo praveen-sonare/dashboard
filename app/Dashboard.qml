@@ -206,7 +206,7 @@ ApplicationWindow {
                         horizontalAlignment: Label.AlignLeft
                         text: translator.translate(qsTr('%1 GALLONS').arg(9), translator.language)
                         font.pixelSize: 24
-                        color: '#66FF99'
+                        color: '#00ADDC'
                     }
                     Label {
                         Layout.fillWidth: true
@@ -225,7 +225,7 @@ ApplicationWindow {
                         horizontalAlignment: Label.AlignLeft
                         text: translator.translate(qsTr('%1 MI').arg(9), translator.language)
                         font.pixelSize: 24
-                        color: '#66FF99'
+                        color: '#00ADDC'
                     }
                     Label {
                         Layout.fillWidth: true
@@ -244,7 +244,7 @@ ApplicationWindow {
                         horizontalAlignment: Label.AlignLeft
                         text: translator.translate(qsTr('%1 MPG').arg(25.5), translator.language)
                         font.pixelSize: 24
-                        color: '#66FF99'
+                        color: '#00ADDC'
                     }
                 }
             }
