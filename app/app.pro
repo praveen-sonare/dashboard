@@ -1,5 +1,6 @@
 TARGET = dashboard
-QT = quick
+QT = quickcontrols2
+
 
 HEADERS += \
     translator.h

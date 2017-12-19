@@ -21,6 +21,7 @@
 #include <QtQml/QQmlContext>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQuick/QQuickWindow>
+#include <QtQuickControls2/QQuickStyle>
 
 #include "translator.h"
 
@@ -36,6 +37,8 @@ int main(int argc, char *argv[])
     app.setApplicationVersion(QStringLiteral("3.99.3"));
     app.setOrganizationDomain(QStringLiteral("automotivelinux.org"));
     app.setOrganizationName(QStringLiteral("AutomotiveGradeLinux"));
+
+    QQuickStyle::setStyle("AGL");
 
     QCommandLineParser parser;
     parser.addPositionalArgument("port", app.translate("main", "port for binding"));
