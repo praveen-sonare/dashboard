@@ -201,7 +201,7 @@ ApplicationWindow {
                         horizontalAlignment: Label.AlignLeft
                         text: '9 GALLONS'
                         font.pixelSize: 24
-                        color: '#66FF99'
+                        color: '#00ADDC'
                     }
                     Label {
                         Layout.fillWidth: true
@@ -220,7 +220,7 @@ ApplicationWindow {
                         horizontalAlignment: Label.AlignLeft
                         text: '229 MI'
                         font.pixelSize: 24
-                        color: '#66FF99'
+                        color: '#00ADDC'
                     }
                     Label {
                         Layout.fillWidth: true
@@ -239,7 +239,7 @@ ApplicationWindow {
                         horizontalAlignment: Label.AlignLeft
                         text: '25.5 MPG'
                         font.pixelSize: 24
-                        color: '#66FF99'
+                        color: '#00ADDC'
                     }
                 }
             }

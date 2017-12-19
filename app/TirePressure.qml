@@ -21,7 +21,7 @@ Image {
         anchors.bottomMargin: 55
         anchors.leftMargin: 140
         anchors.rightMargin: 140
-        color: '#66FF99'
+        color: '#00ADDC'
         font.pixelSize: 20
     }
 
