@@ -55,10 +55,11 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();
     QUrl bindingAddress;
+    int port = 0;
     QString secret;
     if (positionalArguments.length() == 2) {
-        int port = positionalArguments.takeFirst().toInt();
-        QString secret = positionalArguments.takeFirst();
+        port = positionalArguments.takeFirst().toInt();
+        secret = positionalArguments.takeFirst();
         bindingAddress.setScheme(QStringLiteral("ws"));
         bindingAddress.setHost(QStringLiteral("localhost"));
         bindingAddress.setPort(port);
@@ -92,7 +93,7 @@ int main(int argc, char *argv[])
     // HomeScreen
     LibHomeScreen* hs = new LibHomeScreen();
     std::string token = secret.toStdString();
-    hs->init(port, secret.to);
+    hs->init(port, token.c_str());
     // Set the event handler for Event_TapShortcut which will activate the surface for windowmanager
     hs->set_event_handler(LibHomeScreen::Event_TapShortcut, [qwm, myname](json_object *object){
         json_object *appnameJ = nullptr;
