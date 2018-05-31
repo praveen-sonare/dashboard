@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2018 TOYOTA MOTOR CORPORATION
  * Copyright (C) 2016 The Qt Company Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,13 +28,15 @@ ApplicationWindow {
         id: translator
     }
 
-    WebSocket {
-        property string api_str: "api/canivi"
-        property string verb_str: "subscribe"
-        property var msgid_enu: { "call":2, "retok":3, "reterr":4, "event":5 }
-        property string request_str: ""
-        property string status_str: ""
+    property string api_str: "low-can"
+    property string verb_str: "subscribe"
+    property var msgid_enu: { "call":2, "retok":3, "reterr":4, "event":5 }
+    property string request_str: ""
+    property string status_str: ""
 
+    property double speed_val: 0
+    property double engineSpeed: 0
+    WebSocket {
         id: websocket
         url: bindingAddress
 
@@ -45,16 +48,22 @@ ApplicationWindow {
              */
 
             if (message_json[0] == msgid_enu.event) {
-                if (message_json[1] == "canivi/VehicleSpeed")
-                    speed.text = message_json[2].data.value
-                else
-                if (message_json[1] == "canivi/EngineSpeed")
-                    tachometer.value = message_json[2].data.value / 7000
-                return
-            } else
-            if (message_json[0] != msgid_enu.retok) {
-                console.log ("Return value is not ok !")
-                return
+
+                var property_name = message_json[2].event.split("/")[1]
+                if(property_name === "messages.vehicle.average.speed") {
+                    speed_val = message_json[2].data.value
+                }
+                else if (property_name === "messages.engine.speed") {
+                    engineSpeed = message_json[2].data.value
+                    tachometer.value = engineSpeed / 7000
+                }
+            }
+            else
+            {
+                if (message_json[0] != msgid_enu.retok) {
+                    console.log ("Return value is not ok !")
+                    return
+                }
             }
              /* refresh happen */
         }
@@ -66,9 +75,9 @@ ApplicationWindow {
             if (websocket.status == WebSocket.Open) {
                 status_str = "Socket opened; sending message..."
                 if (verb_str == "subscribe") {
-                    request_str ='[' + msgid_enu.call + ',"99999","' + api_str +'/'+ verb_str +'",{ \"event\" : \"VehicleSpeed\" } ]';
+                    request_str ='[' + msgid_enu.call + ',"99998","' + api_str +'/'+ verb_str +'",{ \"event\" : \"vehicle.average.speed\" } ]';
                     websocket.sendTextMessage (request_str)
-                    request_str ='[' + msgid_enu.call + ',"99999","' + api_str +'/'+ verb_str +'",{ \"event\" : \"EngineSpeed\" } ]';
+                    request_str ='[' + msgid_enu.call + ',"99999","' + api_str +'/'+ verb_str +'",{ \"event\" : \"engine.speed\" } ]';
                     websocket.sendTextMessage (request_str)
                 }
             } else
@@ -85,7 +94,7 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 20
-        text: '0'
+        text: speed_val.toFixed(0)         /* KPH */
         font.pixelSize: 256
     }
     Label {
@@ -160,7 +169,7 @@ ApplicationWindow {
         ProgressBar {
             id: tachometer
             Layout.fillWidth: true
-            value: 0
+            value: engineSpeed / 65535
             Label {
                 anchors.left: parent.left
                 anchors.top: parent.bottom
