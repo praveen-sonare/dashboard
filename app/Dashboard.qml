@@ -24,6 +24,9 @@ import Translator 1.0
 ApplicationWindow {
     id: root
 
+    width: container.width * container.scale
+    height: container.height * container.scale
+
     Translator {
         id: translator
     }
@@ -88,6 +91,13 @@ ApplicationWindow {
         }
         active: true
     }
+
+    Item {
+        id: container
+        anchors.centerIn: parent
+        width: 1080
+        height: 1487
+        scale: screenInfo.scale_factor()
 
     Label {
         id: speed
@@ -278,9 +288,13 @@ ApplicationWindow {
 
             Button {
                 text: model.modelData
-                onClicked: translator.language = model.modelData
+                onClicked: {
+                    translator.language = model.modelData
+                    console.log ("Scale = " + screenInfo.scale_factor())
+                }
                 Layout.fillWidth: true
             }
         }
     }
+}
 }
