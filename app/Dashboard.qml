@@ -95,8 +95,8 @@ ApplicationWindow {
     Item {
         id: container
         anchors.centerIn: parent
-        width: 1080
-        height: 1487
+        width: 1920
+        height: 720
         scale: screenInfo.scale_factor()
 
     Label {
@@ -124,34 +124,36 @@ ApplicationWindow {
 
     Image {
         id: car
-        anchors.centerIn: parent
+        anchors.top: parent.top
+        anchors.topMargin: 50
+        anchors.horizontalCenter: container.horizontalCenter
         source: './images/HMI_Dashboard_Car.png'
     }
 
     TirePressure {
         anchors.right: car.left
-        anchors.rightMargin: -20
-        anchors.top: car.top
-        anchors.topMargin: 150
+        anchors.rightMargin: -120
+        anchors.bottom: car.bottom
+        anchors.bottomMargin: -20
         title: translator.translate(qsTr('LEFT FRONT TIRE'), translator.language)
         pressure: translator.translate(qsTr('%1 PSI').arg(23.1), translator.language)
     }
 
     TirePressure {
-        anchors.right: car.left
-        anchors.rightMargin: -20
+        mirror: true
+        anchors.left: car.right
+        anchors.leftMargin: -100
         anchors.bottom: car.bottom
-        anchors.bottomMargin: 120
+        anchors.bottomMargin: -20
         title: translator.translate(qsTr('LEFT REAR TIRE'), translator.language)
         pressure: translator.translate(qsTr('%1 PSI').arg(31.35), translator.language)
     }
 
     TirePressure {
-        mirror: true
-        anchors.left: car.right
-        anchors.leftMargin: -20
-        anchors.top: car.top
-        anchors.topMargin: 150
+        anchors.right: car.left
+        anchors.rightMargin: -120
+        anchors.bottom: car.top
+        anchors.bottomMargin: -80
         title: translator.translate(qsTr('RIGHT FRONT TIRE'), translator.language)
         pressure: translator.translate(qsTr('%1 PSI').arg(24.2), translator.language)
     }
@@ -159,9 +161,9 @@ ApplicationWindow {
     TirePressure {
         mirror: true
         anchors.left: car.right
-        anchors.leftMargin: -20
-        anchors.bottom : car.bottom
-        anchors.bottomMargin: 120
+        anchors.leftMargin: -100
+        anchors.bottom: car.top
+        anchors.bottomMargin: -80
         title: translator.translate(qsTr('RIGHT REAR TIRE'), translator.language)
         pressure: translator.translate(qsTr('%1 PSI').arg(33.0), translator.language)
     }
