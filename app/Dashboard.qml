@@ -111,13 +111,13 @@ ApplicationWindow {
         id: unit
         anchors.left: speed.right
         anchors.baseline: speed.baseline
-        text: 'Km/h'
+        text: 'mph' //'Km/h'
         font.pixelSize: 64
     }
     Label {
         anchors.left: unit.left
         anchors.top: unit.bottom
-        text: '100,000.5 km'
+        text: '100,000.5 miles'
         font.pixelSize: 32
         opacity: 0.5
     }
