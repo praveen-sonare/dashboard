@@ -279,20 +279,34 @@ ApplicationWindow {
     }
 
     RowLayout {
-//        visible: false
-        anchors.left: parent.left
         anchors.bottom: parent.bottom
-        anchors.right: parent.right
+        anchors.horizontalCenter: parent.horizontalCenter
         Repeater {
-            model: ['C', 'fr_FR', 'ja_JP', 'zh_CN']
+            model: ListModel {
+                ListElement {
+                    code: 'C'
+                    language: QT_TR_NOOP('English')
+                }
+                ListElement {
+                    code: 'fr_FR'
+                    language: QT_TR_NOOP('Français')
+                }
+                ListElement {
+                    code: 'ja_JP'
+                    language: QT_TR_NOOP('日本語')
+                }
+                ListElement {
+                    code: 'zh_CN'
+                    language: QT_TR_NOOP('中文简体')
+                }
+            }
 
             Button {
-                text: model.modelData
+                text: qsTr(model.language)
                 onClicked: {
-                    translator.language = model.modelData
+                    translator.language = model.code
                     console.log ("Scale = " + screenInfo.scale_factor())
                 }
-                Layout.fillWidth: true
             }
         }
     }
