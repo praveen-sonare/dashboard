@@ -289,7 +289,7 @@ ApplicationWindow {
                 }
                 ListElement {
                     code: 'fr_FR'
-                    language: QT_TR_NOOP('French')
+                    language: QT_TR_NOOP('Français')
                 }
                 ListElement {
                     code: 'ja_JP'
