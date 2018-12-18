@@ -104,20 +104,20 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 20
-        text: speed_val.toFixed(0)         /* KPH */
+        text: speed_val.toFixed(0)         /* MPH */
         font.pixelSize: 256
     }
     Label {
         id: unit
         anchors.left: speed.right
         anchors.baseline: speed.baseline
-        text: 'Km/h'
+        text: 'MPH'
         font.pixelSize: 64
     }
     Label {
         anchors.left: unit.left
         anchors.top: unit.bottom
-        text: '100,000.5 km'
+        text: '10,000.5 miles'
         font.pixelSize: 32
         opacity: 0.5
     }
