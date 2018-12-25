@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 {
     AGLApplication app(argc, argv);
     app.setApplicationName("Dashboard");
-    app.setupApplicationRole("Dashboard");
+    app.setupApplicationRole("dashboard");
 
     qmlRegisterType<Translator>("Translator", 1, 0, "Translator");
     app.load(QUrl(QStringLiteral("qrc:/Dashboard.qml")));
