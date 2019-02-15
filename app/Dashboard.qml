@@ -24,8 +24,8 @@ import Translator 1.0
 ApplicationWindow {
     id: root
 
-    width: container.width * container.scale
-    height: container.height * container.scale
+    width: screenInfo.width()
+    height: screenInfo.height()
 
     Translator {
         id: translator
@@ -96,8 +96,18 @@ ApplicationWindow {
         id: container
         anchors.centerIn: parent
         width: 1080
-        height: 1487
+        height: 1488
         scale: screenInfo.scale_factor()
+
+        Connections {
+            target: screenInfo
+            onSizeChanged: {
+                console.log("The application size changed !")
+                var w_scale = screenInfo.width() / container.width
+                var h_scale = screenInfo.height() / container.height
+                container.scale = w_scale < h_scale ? w_scale : h_scale
+            }
+        }
 
     Label {
         id: speed
@@ -305,6 +315,8 @@ ApplicationWindow {
                 text: qsTr(model.language)
                 onClicked: {
                     translator.language = model.code
+                    console.log ("width = " + screenInfo.width())
+                    console.log ("height = " + screenInfo.height())
                     console.log ("Scale = " + screenInfo.scale_factor())
                 }
             }
