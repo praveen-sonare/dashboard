@@ -72,22 +72,22 @@
         <translation>燃料</translation>
     </message>
     <message>
-        <location filename="../Dashboard.qml" line="291"/>
+        <location filename="../Dashboard.qml" line="290"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Dashboard.qml" line="295"/>
-        <source>French</source>
+        <location filename="../Dashboard.qml" line="294"/>
+        <source>Français</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Dashboard.qml" line="299"/>
+        <location filename="../Dashboard.qml" line="298"/>
         <source>日本語</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Dashboard.qml" line="303"/>
+        <location filename="../Dashboard.qml" line="302"/>
         <source>中文简体</source>
         <translation type="unfinished"></translation>
     </message>
