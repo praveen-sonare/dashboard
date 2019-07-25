@@ -24,8 +24,8 @@ import Translator 1.0
 ApplicationWindow {
     id: root
 
-    width: container.width * container.scale
-    height: container.height * container.scale
+    //width: container.width * container.scale
+    //height: container.height * container.scale
 
     Translator {
         id: translator
@@ -97,7 +97,9 @@ ApplicationWindow {
         anchors.centerIn: parent
         width: 1080
         height: 1487
-        scale: screenInfo.scale_factor()
+        //scale: screenInfo.scale_factor()
+        //scale: 1080 / root.width
+        scale: root.height / 1487
 
     Label {
         id: speed
