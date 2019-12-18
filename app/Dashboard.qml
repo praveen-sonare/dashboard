@@ -18,7 +18,6 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
-import QtWebSockets 1.0
 import Translator 1.0
 
 ApplicationWindow {
@@ -31,65 +30,25 @@ ApplicationWindow {
         id: translator
     }
 
-    property string api_str: "low-can"
-    property string verb_str: "subscribe"
-    property var msgid_enu: { "call":2, "retok":3, "reterr":4, "event":5 }
-    property string request_str: ""
-    property string status_str: ""
-
-    property double speed_val: 0
+    property double vehicleSpeed: 0
     property double engineSpeed: 0
-    WebSocket {
-        id: websocket
-        url: bindingAddress
 
-        onTextMessageReceived: {
-            var message_json = JSON.parse (message);
-            /*
-            console.log ("Raw response: " + message)
-            console.log ("JSON response: " + message_json)
-             */
+    Connections {
+        target: SignalComposer
 
-            if (message_json[0] == msgid_enu.event) {
-
-                var property_name = message_json[2].event.split("/")[1]
-                if(property_name === "messages.vehicle.average.speed") {
-                    speed_val = message_json[2].data.value
+        onSignalEvent: {
+            if (uid === "event.vehicle.speed") {
+                var speed_tmp = parseFloat(value)
+                if(units == "km/h") {
+                    speed_tmp /= 1.609
                 }
-                else if (property_name === "messages.engine.speed") {
-                    engineSpeed = message_json[2].data.value
-                    tachometer.value = engineSpeed / 7000
-                }
+                vehicleSpeed = speed_tmp
             }
-            else
-            {
-                if (message_json[0] != msgid_enu.retok) {
-                    console.log ("Return value is not ok !")
-                    return
-                }
+            else if (uid === "event.engine.speed") {
+                engineSpeed = parseFloat(value)
+                tachometer.value = engineSpeed / 7000
             }
-             /* refresh happen */
         }
-        onStatusChanged: {
-            if (websocket.status == WebSocket.Error) {
-                status_str = "Error: " + websocket.errorString
-            }
-            else
-            if (websocket.status == WebSocket.Open) {
-                status_str = "Socket opened; sending message..."
-                if (verb_str == "subscribe") {
-                    request_str ='[' + msgid_enu.call + ',"99998","' + api_str +'/'+ verb_str +'",{ \"event\" : \"vehicle.average.speed\" } ]';
-                    websocket.sendTextMessage (request_str)
-                    request_str ='[' + msgid_enu.call + ',"99999","' + api_str +'/'+ verb_str +'",{ \"event\" : \"engine.speed\" } ]';
-                    websocket.sendTextMessage (request_str)
-                }
-            } else
-            if (websocket.status == WebSocket.Closed) {
-                status_str = "Socket closed"
-            }
-            console.log (status_str)
-        }
-        active: true
     }
 
     Item {
@@ -104,7 +63,7 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 20
-        text: speed_val.toFixed(0)         /* MPH */
+        text: vehicleSpeed.toFixed(0)         /* MPH */
         font.pixelSize: 256
     }
     Label {

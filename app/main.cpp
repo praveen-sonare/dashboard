@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 The Qt Company Ltd.
+ * Copyright (C) 2019 Konsulko Group
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,8 @@
 
 #include <QtAGLExtras/AGLApplication>
 #include <QtQml/QQmlApplicationEngine>
+#include <QtQml/QQmlContext>
+#include <signalcomposer.h>
 #include "translator.h"
 
 int main(int argc, char *argv[])
@@ -24,6 +27,15 @@ int main(int argc, char *argv[])
     app.setApplicationName("Dashboard");
     app.setupApplicationRole("dashboard");
 
+    QQmlApplicationEngine *engine = app.getQmlApplicationEngine();
+    QQmlContext *context = engine->rootContext();
+    QVariant v = context->contextProperty(QStringLiteral("bindingAddress"));
+    if(v.canConvert(QMetaType::QUrl)) {
+        QUrl bindingAddress = v.toUrl();
+        context->setContextProperty("SignalComposer", new SignalComposer(bindingAddress, context));
+    } else {
+        qCritical("Cannot find bindingAddress property in context, SignalComposer unavailable");
+    }
     qmlRegisterType<Translator>("Translator", 1, 0, "Translator");
     app.load(QUrl(QStringLiteral("qrc:/Dashboard.qml")));
     return app.exec();

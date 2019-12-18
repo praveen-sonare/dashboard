@@ -7,6 +7,9 @@ HEADERS += \
 SOURCES = main.cpp \
     translator.cpp
 
+CONFIG += link_pkgconfig
+PKGCONFIG += qtappfw
+
 RESOURCES += \
     dashboard.qrc \
     images/images.qrc
