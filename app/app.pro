@@ -1,5 +1,5 @@
 TARGET = dashboard
-QT = quick aglextras
+QT = quick
 
 HEADERS += \
     translator.h

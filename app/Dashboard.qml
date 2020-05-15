@@ -20,6 +20,8 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import Translator 1.0
 
+import QtQuick.Window 2.13
+
 ApplicationWindow {
     id: root
 
@@ -54,9 +56,10 @@ ApplicationWindow {
     Item {
         id: container
         anchors.centerIn: parent
-        width: 1080
-        height: 1487
-        scale: screenInfo.scale_factor()
+        width: Screen.width
+        height: Screen.height
+        //scale: screenInfo.scale_factor()
+        scale: 1
 
     Label {
         id: speed

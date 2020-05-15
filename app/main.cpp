@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-#include <QtAGLExtras/AGLApplication>
+#include <QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQml/QQmlContext>
+#include <QtGui/QGuiApplication>
 #include <signalcomposer.h>
 #include "translator.h"
 
 int main(int argc, char *argv[])
 {
-    AGLApplication app(argc, argv);
-    app.setApplicationName("Dashboard");
-    app.setupApplicationRole("dashboard");
+    QGuiApplication app(argc, argv);
+    app.setDesktopFileName("dashboard");
 
-    QQmlApplicationEngine *engine = app.getQmlApplicationEngine();
-    QQmlContext *context = engine->rootContext();
+    QQmlApplicationEngine engine;
+    QQmlContext *context = engine.rootContext();
     QVariant v = context->contextProperty(QStringLiteral("bindingAddress"));
     if(v.canConvert(QMetaType::QUrl)) {
         QUrl bindingAddress = v.toUrl();
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
         qCritical("Cannot find bindingAddress property in context, SignalComposer unavailable");
     }
     qmlRegisterType<Translator>("Translator", 1, 0, "Translator");
-    app.load(QUrl(QStringLiteral("qrc:/Dashboard.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/Dashboard.qml")));
     return app.exec();
 }
 
