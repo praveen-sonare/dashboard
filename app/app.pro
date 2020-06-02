@@ -8,7 +8,7 @@ SOURCES = main.cpp \
     translator.cpp
 
 CONFIG += link_pkgconfig
-PKGCONFIG += qtappfw
+PKGCONFIG += qtappfw-signal-composer
 
 RESOURCES += \
     dashboard.qrc \
