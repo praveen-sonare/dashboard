@@ -10,6 +10,10 @@ SOURCES = main.cpp \
 CONFIG += link_pkgconfig
 PKGCONFIG += qtappfw-signal-composer
 
+CONFIG(release, debug|release) {
+    QMAKE_POST_LINK = $(STRIP) --strip-unneeded $(TARGET)
+}
+
 RESOURCES += \
     dashboard.qrc \
     images/images.qrc
