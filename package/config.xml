@@ -7,7 +7,6 @@
   <author>Qt</author>
   <license>APL 2.0</license>
   <feature name="urn:AGL:widget:required-api">
-    <param name="homescreen" value="ws"/>
     <param name="signal-composer" value="ws"/>
   </feature>
   <feature name="urn:AGL:widget:required-permission">
