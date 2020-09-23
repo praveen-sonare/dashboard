@@ -19,6 +19,8 @@
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQml/QQmlContext>
 #include <QtGui/QGuiApplication>
+#include <QtCore/QCommandLineParser>
+#include <QtCore/QUrlQuery>
 #include <signalcomposer.h>
 #include "translator.h"
 
@@ -27,15 +29,32 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     app.setDesktopFileName("dashboard");
 
+    QCommandLineParser parser;
+    parser.addPositionalArgument("port", app.translate("main", "port for binding"));
+    parser.addPositionalArgument("secret", app.translate("main", "secret for binding"));
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.process(app);
+    QStringList positionalArguments = parser.positionalArguments();
+    if (positionalArguments.length() != 2) {
+        exit(EXIT_FAILURE);
+    }
+
+    int port = positionalArguments.takeFirst().toInt();
+    QString secret = positionalArguments.takeFirst();
+    QUrlQuery query;
+    query.addQueryItem(QStringLiteral("token"), secret);
+
+    QUrl bindingAddress;
+    bindingAddress.setScheme(QStringLiteral("ws"));
+    bindingAddress.setHost(QStringLiteral("localhost"));
+    bindingAddress.setPort(port);
+    bindingAddress.setPath(QStringLiteral("/api"));
+    bindingAddress.setQuery(query);
+
     QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();
-    QVariant v = context->contextProperty(QStringLiteral("bindingAddress"));
-    if(v.canConvert(QMetaType::QUrl)) {
-        QUrl bindingAddress = v.toUrl();
-        context->setContextProperty("SignalComposer", new SignalComposer(bindingAddress, context));
-    } else {
-        qCritical("Cannot find bindingAddress property in context, SignalComposer unavailable");
-    }
+    context->setContextProperty("SignalComposer", new SignalComposer(bindingAddress, context));
     qmlRegisterType<Translator>("Translator", 1, 0, "Translator");
     engine.load(QUrl(QStringLiteral("qrc:/Dashboard.qml")));
     return app.exec();
