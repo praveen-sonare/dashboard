@@ -261,6 +261,10 @@ ApplicationWindow {
                     code: 'zh_CN'
                     language: QT_TR_NOOP('中文简体')
                 }
+                ListElement {
+                    code: 'ko_KR'
+                    language: QT_TR_NOOP('한국어')
+                }
             }
 
             Button {

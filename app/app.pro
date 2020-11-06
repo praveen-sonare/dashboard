@@ -20,5 +20,5 @@ RESOURCES += \
 
 include(app.pri)
 
-LANGUAGES = ja_JP fr_FR zh_CN
+LANGUAGES = ja_JP fr_FR zh_CN ko_KR
 include(translations.pri)
