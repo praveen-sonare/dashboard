@@ -1,24 +1,24 @@
+TEMPLATE = app
 TARGET = dashboard
-QT = quick
+QT = qml quick
+CONFIG += c++11 link_pkgconfig
 
 HEADERS += \
     translator.h
 
-SOURCES = main.cpp \
+SOURCES = \
+    main.cpp \
     translator.cpp
-
-CONFIG += link_pkgconfig
-PKGCONFIG += qtappfw-signal-composer
-
-CONFIG(release, debug|release) {
-    QMAKE_POST_LINK = $(STRIP) --strip-unneeded $(TARGET)
-}
 
 RESOURCES += \
     dashboard.qrc \
     images/images.qrc
 
-include(app.pri)
-
 LANGUAGES = ja_JP fr_FR zh_CN ko_KR
 include(translations.pri)
+
+target.path = $${PREFIX}/usr/bin
+target.files += $${OUT_PWD}/$${TARGET}
+target.CONFIG = no_check_exist executable
+
+INSTALLS += target

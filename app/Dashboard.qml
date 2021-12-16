@@ -34,7 +34,7 @@ ApplicationWindow {
 
     property double vehicleSpeed: 0
     property double engineSpeed: 0
-
+/*
     Connections {
         target: SignalComposer
 
@@ -52,14 +52,12 @@ ApplicationWindow {
             }
         }
     }
-
+*/
     Item {
         id: container
         anchors.centerIn: parent
         width: Window.width
         height: Window.height
-        //scale: screenInfo.scale_factor()
-        scale: 1
 
     Label {
         id: speed
@@ -271,7 +269,6 @@ ApplicationWindow {
                 text: qsTr(model.language)
                 onClicked: {
                     translator.language = model.code
-                    console.log ("Scale = " + screenInfo.scale_factor())
                 }
             }
         }

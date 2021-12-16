@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2016 The Qt Company Ltd.
- * Copyright (C) 2019 Konsulko Group
+ * Copyright (C) 2019,2021 Konsulko Group
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,47 +16,21 @@
  */
 
 #include <QGuiApplication>
-#include <QtQml/QQmlApplicationEngine>
-#include <QtQml/QQmlContext>
-#include <QtGui/QGuiApplication>
-#include <QtCore/QCommandLineParser>
-#include <QtCore/QUrlQuery>
-#include <signalcomposer.h>
+#include <QQmlApplicationEngine>
+
 #include "translator.h"
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
-    app.setDesktopFileName("dashboard");
+	setenv("QT_QUICK_CONTROLS_STYLE", "AGL", 1);
 
-    QCommandLineParser parser;
-    parser.addPositionalArgument("port", app.translate("main", "port for binding"));
-    parser.addPositionalArgument("secret", app.translate("main", "secret for binding"));
-    parser.addHelpOption();
-    parser.addVersionOption();
-    parser.process(app);
-    QStringList positionalArguments = parser.positionalArguments();
-    if (positionalArguments.length() != 2) {
-        exit(EXIT_FAILURE);
-    }
+	QGuiApplication app(argc, argv);
+	app.setDesktopFileName("dashboard");
 
-    int port = positionalArguments.takeFirst().toInt();
-    QString secret = positionalArguments.takeFirst();
-    QUrlQuery query;
-    query.addQueryItem(QStringLiteral("token"), secret);
+	QQmlApplicationEngine engine;
+	qmlRegisterType<Translator>("Translator", 1, 0, "Translator");
+	engine.load(QUrl(QStringLiteral("qrc:/Dashboard.qml")));
 
-    QUrl bindingAddress;
-    bindingAddress.setScheme(QStringLiteral("ws"));
-    bindingAddress.setHost(QStringLiteral("localhost"));
-    bindingAddress.setPort(port);
-    bindingAddress.setPath(QStringLiteral("/api"));
-    bindingAddress.setQuery(query);
-
-    QQmlApplicationEngine engine;
-    QQmlContext *context = engine.rootContext();
-    context->setContextProperty("SignalComposer", new SignalComposer(bindingAddress, context));
-    qmlRegisterType<Translator>("Translator", 1, 0, "Translator");
-    engine.load(QUrl(QStringLiteral("qrc:/Dashboard.qml")));
-    return app.exec();
+	return app.exec();
 }
 
