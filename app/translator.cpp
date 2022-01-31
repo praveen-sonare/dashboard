@@ -41,8 +41,7 @@ void Translator::setTranslator(const QString &language)
     }
     QLocale locale(language);
     QString fileName = QCoreApplication::instance()->applicationName().toLower();
-    qDebug() << "####" << QDir::currentPath() << QCoreApplication::applicationDirPath();
-    if (m_translator->load(locale, fileName, QStringLiteral("_"), QStringLiteral("%1/../translations").arg(QCoreApplication::applicationDirPath()))) {
+    if (m_translator->load(locale, fileName, QStringLiteral("_"), QStringLiteral("/usr/share/%1").arg(fileName))) {
         QCoreApplication::installTranslator(m_translator);
     } else {
         delete m_translator;
