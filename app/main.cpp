@@ -17,6 +17,8 @@
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <vehiclesignals.h>
 
 #include "translator.h"
 
@@ -28,6 +30,9 @@ int main(int argc, char *argv[])
 	app.setDesktopFileName("dashboard");
 
 	QQmlApplicationEngine engine;
+	QQmlContext *context = engine.rootContext();
+	VehicleSignalsConfig vsConfig("dashboard");
+	context->setContextProperty("VehicleSignals", new VehicleSignals(vsConfig));
 	qmlRegisterType<Translator>("Translator", 1, 0, "Translator");
 	engine.load(QUrl(QStringLiteral("qrc:/Dashboard.qml")));
 

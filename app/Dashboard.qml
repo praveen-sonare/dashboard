@@ -34,25 +34,58 @@ ApplicationWindow {
 
     property double vehicleSpeed: 0
     property double engineSpeed: 0
-/*
-    Connections {
-        target: SignalComposer
+    property bool mphDisplay: false
 
-        onSignalEvent: {
-            if (uid === "event.vehicle.speed") {
-                var speed_tmp = parseFloat(value)
-                if(units == "km/h") {
-                    speed_tmp /= 1.609
+    Component.onCompleted : {
+        VehicleSignals.connect()
+    }
+
+    Connections {
+        target: VehicleSignals
+
+        onConnected: {
+	    VehicleSignals.authorize()
+        }
+
+        onAuthorized: {
+	    VehicleSignals.subscribe("Vehicle.Speed")
+	    VehicleSignals.subscribe("Vehicle.Powertrain.CombustionEngine.Engine.Speed")
+	    VehicleSignals.get("Vehicle.Cabin.Infotainment.HMI.DistanceUnit")
+	    VehicleSignals.subscribe("Vehicle.Cabin.Infotainment.HMI.DistanceUnit")
+	}
+
+        onGetSuccessResponse: {
+            //console.log("response path = " + path + ", value = " + value)
+            if (path === "Vehicle.Cabin.Infotainment.HMI.DistanceUnit") {
+                if (value === "km") {
+                    mphDisplay = false
+                } else if (value === "mi") {
+                    mphDisplay = true
                 }
-                vehicleSpeed = speed_tmp
             }
-            else if (uid === "event.engine.speed") {
+        }
+
+        onSignalNotification: {
+            //console.log("signal path = " + path + ", value = " + value)
+            if (path === "Vehicle.Speed") {
+                // value units are always km/h
+                if (mphDisplay)
+                    vehicleSpeed = parseFloat(value) * 0.621504
+                else
+                    vehicleSpeed = parseFloat(value)
+            } else if (path === "Vehicle.Powertrain.CombustionEngine.Engine.Speed") {
                 engineSpeed = parseFloat(value)
                 tachometer.value = engineSpeed / 7000
+            } else if (path === "Vehicle.Cabin.Infotainment.HMI.DistanceUnit") {
+                if (value === "km") {
+                    mphDisplay = false
+                } else if (value === "mi") {
+                    mphDisplay = true
+                }
             }
         }
     }
-*/
+
     Item {
         id: container
         anchors.centerIn: parent
@@ -64,20 +97,20 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 20
-        text: vehicleSpeed.toFixed(0)         /* MPH */
+        text: vehicleSpeed.toFixed(0)
         font.pixelSize: 256
     }
     Label {
         id: unit
         anchors.left: speed.right
         anchors.baseline: speed.baseline
-        text: 'MPH'
+        text: root.mphDisplay ? 'MPH' : "KPH"
         font.pixelSize: 64
     }
     Label {
         anchors.left: unit.left
         anchors.top: unit.bottom
-        text: '10,000.5 miles'
+        text: root.mphDisplay ? '10,000.5 miles' : "10,000.5 km"
         font.pixelSize: 32
         opacity: 0.5
     }

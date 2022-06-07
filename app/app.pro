@@ -3,6 +3,8 @@ TARGET = dashboard
 QT = qml quick
 CONFIG += c++11 link_pkgconfig
 
+PKGCONFIG += qtappfw-vehicle-signals
+
 HEADERS += \
     translator.h
 
