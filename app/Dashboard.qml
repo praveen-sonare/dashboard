@@ -49,7 +49,7 @@ ApplicationWindow {
 
         onAuthorized: {
 	    VehicleSignals.subscribe("Vehicle.Speed")
-	    VehicleSignals.subscribe("Vehicle.Powertrain.CombustionEngine.Engine.Speed")
+	    VehicleSignals.subscribe("Vehicle.Powertrain.CombustionEngine.Speed")
 	    VehicleSignals.get("Vehicle.Cabin.Infotainment.HMI.DistanceUnit")
 	    VehicleSignals.subscribe("Vehicle.Cabin.Infotainment.HMI.DistanceUnit")
 	}
@@ -73,7 +73,7 @@ ApplicationWindow {
                     vehicleSpeed = parseFloat(value) * 0.621504
                 else
                     vehicleSpeed = parseFloat(value)
-            } else if (path === "Vehicle.Powertrain.CombustionEngine.Engine.Speed") {
+            } else if (path === "Vehicle.Powertrain.CombustionEngine.Speed") {
                 engineSpeed = parseFloat(value)
                 tachometer.value = engineSpeed / 7000
             } else if (path === "Vehicle.Cabin.Infotainment.HMI.DistanceUnit") {
