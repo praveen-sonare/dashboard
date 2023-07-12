@@ -118,7 +118,7 @@ ApplicationWindow {
     Image {
         id: car
         anchors.centerIn: parent
-        source: './images/green.png'
+        source: './images/p15.png'
     }
 
     TirePressure {

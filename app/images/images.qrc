@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/images">
-        <file>green.png</file>
+        <file>p15.png</file>
         <file>HMI_Dashboard_Fuel_Icon.svg</file>
         <file>HMI_Dashboard_LeftTire.svg</file>
         <file>HMI_Dashboard_RightTire.svg</file>
